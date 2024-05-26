@@ -1,0 +1,40 @@
+service: SENDGRID
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):region}
+
+
+  environment:
+    sendGridApiKey: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):sendGridApiKey}
+    accessKeyId: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):accessKeyId}
+    secretAccessKey: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):secretAccessKey}
+    globalmailQueueUrl: ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):globalmailQueueUrl}   
+
+functions:
+  sendEmail:
+    handler: handler.sendEmail
+    vpc:
+      securityGroupIds:
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):securityGroupIds}
+      subnetIds:
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):subnetIds1}
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):subnetIds2}
+    name: ${opt:stage, self:provider.stage, 'dev'}-SENDGRID-EMAIL
+    events:
+      - http:
+          path: sendemail
+          method: post
+
+  sendGlobalMail:
+    handler: handler.sendGlobalMail
+    vpc:
+      securityGroupIds:
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):securityGroupIds}
+      subnetIds:
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):subnetIds1}
+        - ${file(./config.${opt:stage, self:provider.stage, 'dev'}.json):subnetIds2}
+    name: ${opt:stage, self:provider.stage, 'dev'}-EMAIL-GLOBAL
+        

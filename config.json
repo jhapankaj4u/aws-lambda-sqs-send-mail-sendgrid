@@ -1,0 +1,10 @@
+{
+  "sendGridApiKey": "SG.XXXXXXXXXXXXXXXXXXXXXXXXX",
+  "securityGroupIds": "sg",
+  "subnetIds1":"subnet-1",
+  "subnetIds2":"subnet-2",
+  "region": "eu-central-1",
+  "accessKeyId": "XXXXXXXXXXX",
+  "secretAccessKey": "POIOP+XCREDF",
+  "globalmailQueueUrl":"https://sqs.eu-central-1.amazonaws.com/xxxxxx/email-queue"
+}
